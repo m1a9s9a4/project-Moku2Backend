@@ -1,0 +1,10 @@
+version: '3'
+services:
+  api:
+    build: ./docker/
+    container_name: api
+    command: "realize start --run"
+    volumes:
+      - ./:/app # dockerコンテナ上の変更をローカルのmacに保存
+    ports:
+      - 8080:8080 # 開放するポート
