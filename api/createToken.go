@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -15,7 +16,13 @@ import (
 
 func CreateToken() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
-		idToken := c.Param("idToken")
+		m := echo.Map{}
+		if err := c.Bind(&m); err != nil {
+			fmt.Println(err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "IDが設定されていません")
+		}
+		// interfaceになってるためstringに変換
+		idToken := m["idToken"].(string)
 		if idToken == "" {
 			return echo.NewHTTPError(http.StatusInternalServerError, "IDが設定されていません")
 		}
